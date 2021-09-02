@@ -1,0 +1,213 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "lib/assimp/contrib/irrXML/libIrrXMLd.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"ADD_DEFINITIONS",
+			"INCLUDE_DIRECTORIES",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"lib/assimp/contrib/irrXML/CMakeLists.txt",
+			"lib/assimp/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 19,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 24,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 551,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 465,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 219,
+				"parent" : 3
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 13,
+				"parent" : 7
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -fvisibility=hidden -fno-strict-aliasing -Wall -fPIC -std=c++0x  -g"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "ASSIMP_BUILD_NO_C4D_IMPORTER"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "ASSIMP_BUILD_NO_OWN_ZLIB"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 6,
+					"path" : "/home/niklas/Desktop/voxel_renderer/build/lib/assimp/include"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/niklas/Desktop/voxel_renderer/build/lib/assimp"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/niklas/Desktop/voxel_renderer/lib/assimp/include"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/niklas/Desktop/voxel_renderer/lib/assimp/code"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/niklas/Desktop/voxel_renderer/lib/assimp/."
+				},
+				{
+					"backtrace" : 8,
+					"path" : "/home/niklas/Desktop/voxel_renderer"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				5
+			]
+		}
+	],
+	"id" : "IrrXML::@5552482383d9422ffa26",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"name" : "IrrXML",
+	"nameOnDisk" : "libIrrXMLd.a",
+	"paths" : 
+	{
+		"build" : "lib/assimp/contrib/irrXML",
+		"source" : "lib/assimp/contrib/irrXML"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				6
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				5
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "lib/assimp/contrib/irrXML/CXMLReaderImpl.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "lib/assimp/contrib/irrXML/heapsort.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "lib/assimp/contrib/irrXML/irrArray.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "lib/assimp/contrib/irrXML/irrString.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "lib/assimp/contrib/irrXML/irrTypes.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "lib/assimp/contrib/irrXML/irrXML.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "lib/assimp/contrib/irrXML/irrXML.h",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}
