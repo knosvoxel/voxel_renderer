@@ -39,6 +39,9 @@ float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
+float cameraMovementSpeed = 4.0f;
+float cameraBoostSpeed = 8.0f;
+
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -47,6 +50,7 @@ float lastFrame = 0.0f;
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 bool escapePressed = false;
+bool shiftKeyPressed = false;
 bool vsyncOn = false;
 bool spotLightOn = false;
 
@@ -239,6 +243,11 @@ float vertices[] = {
             glfwSwapInterval(1);
         }
 
+        if(shiftKeyPressed)
+            camera.boostMovementSpeed(cameraBoostSpeed);
+        if(!shiftKeyPressed)
+            camera.resetMovementSpeed(cameraMovementSpeed);
+
         // input
         // -----
         processInput(window);
@@ -251,31 +260,6 @@ float vertices[] = {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
-        /*if(show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-
-                {
-            static float f = 0.0f;
-            static int counter = 0;
-
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }*/
 
         ImGui::Begin("Lights");
         
@@ -311,6 +295,10 @@ float vertices[] = {
         ImGui::InputFloat("Outer Cutoff", &spotOuterCutOff);
         ImGui::Checkbox("Spotlight Active", &spotLightOn);
 
+        ImGui::Text("Camera");
+        ImGui::InputFloat("Movement Speed", &cameraMovementSpeed);
+        ImGui::InputFloat("Boosted Movement Speed", &cameraBoostSpeed);
+
         ImGui::Text("VSync");
         ImGui::Checkbox("VSync", &vsyncOn);
         ImGui::End();
@@ -322,15 +310,6 @@ float vertices[] = {
         pointAmbient.x = pointDiffuse.x * pointAmbientValue;
         pointAmbient.y = pointDiffuse.y * pointAmbientValue;
         pointAmbient.z = pointDiffuse.z * pointAmbientValue;
-
-        /*if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }*/
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
@@ -459,6 +438,10 @@ void processInput(GLFWwindow *window)
             camera.ProcessKeyboard(LEFT, deltaTime);
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
             camera.ProcessKeyboard(RIGHT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+            shiftKeyPressed = true;
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+            shiftKeyPressed = false;
     }
 }
 
