@@ -51,7 +51,7 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 bool escapePressed = false;
 bool shiftKeyPressed = false;
-bool vsyncOn = false;
+bool vsyncOn = true;
 bool spotLightOn = false;
 
 int main()
@@ -236,11 +236,11 @@ float vertices[] = {
 
         if(vsyncOn)
         {
-            glfwSwapInterval(0);
+            glfwSwapInterval(1);
         }
         else
         {
-            glfwSwapInterval(1);
+            glfwSwapInterval(0);
         }
 
         if(shiftKeyPressed)
