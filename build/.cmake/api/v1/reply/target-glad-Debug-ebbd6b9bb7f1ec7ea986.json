@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "libgladd.a"
+			"path" : "libglad.a"
 		}
 	],
 	"backtrace" : 1,
@@ -73,7 +73,7 @@
 	],
 	"id" : "glad::@6890427a1f51a3e7e1df",
 	"name" : "glad",
-	"nameOnDisk" : "libgladd.a",
+	"nameOnDisk" : "libglad.a",
 	"paths" : 
 	{
 		"build" : ".",
