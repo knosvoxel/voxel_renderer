@@ -27,7 +27,7 @@ class Model
     public:
         std::vector<Texture> textures_loaded;
 
-        Model(char* path)
+        Model(const char* path)
         {
             loadModel(path);
         }
