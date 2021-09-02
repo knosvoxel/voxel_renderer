@@ -220,12 +220,12 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "lib/glfw/src/libglfw3.a",
+				"fragment" : "lib/glfw/src/libglfw3d.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "libglad.a",
+				"fragment" : "libgladd.a",
 				"role" : "libraries"
 			},
 			{
@@ -310,43 +310,43 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/imgui.cpp",
+			"path" : "src/imgui/imgui.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/imgui_widgets.cpp",
+			"path" : "src/imgui/imgui_widgets.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/imgui_tables.cpp",
+			"path" : "src/imgui/imgui_tables.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/imgui_impl_opengl3.cpp",
+			"path" : "src/imgui/imgui_impl_opengl3.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/imgui_impl_glfw.cpp",
+			"path" : "src/imgui/imgui_impl_glfw.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/imgui_draw.cpp",
+			"path" : "src/imgui/imgui_draw.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/imgui_demo.cpp",
+			"path" : "src/imgui/imgui_demo.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

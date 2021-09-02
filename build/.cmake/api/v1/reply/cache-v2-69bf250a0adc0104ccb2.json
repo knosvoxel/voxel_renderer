@@ -627,10 +627,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "C compiler"
+					"value" : "No help, variable specified on the command line."
 				}
 			],
-			"type" : "STRING",
+			"type" : "FILEPATH",
 			"value" : "/bin/x86_64-redhat-linux-gcc-11"
 		},
 		{
@@ -4792,30 +4792,6 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "/usr/lib64"
-		},
-		{
-			"name" : "voxel_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/niklas/Desktop/voxel_renderer/build"
-		},
-		{
-			"name" : "voxel_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/niklas/Desktop/voxel_renderer"
 		},
 		{
 			"name" : "voxel_renderer_BINARY_DIR",
