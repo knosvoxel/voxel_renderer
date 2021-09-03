@@ -138,8 +138,8 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader lightingShader("../shaders/learnopengl/lighting.vs", "../shaders/learnopengl/lighting.fs");
-    Shader lightCubeShader("../shaders/learnopengl/light_cube.vs", "../shaders/learnopengl/light_cube.fs");
+    Shader lightingShader("../shaders/lighting.vs", "../shaders/lighting.fs");
+    Shader lightCubeShader("../shaders/light_cube.vs", "../shaders/light_cube.fs");
 
     Model ourModel("../res/objects/backpack/backpack.obj");
 
