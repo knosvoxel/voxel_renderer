@@ -220,12 +220,12 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "lib/glfw/src/libglfw3.a",
+				"fragment" : "lib/glfw/src/libglfw3d.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "libglad.a",
+				"fragment" : "libgladd.a",
 				"role" : "libraries"
 			},
 			{
