@@ -231,12 +231,12 @@
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "lib/glfw/src/libglfw3d.a",
+				"fragment" : "lib/glfw/src/libglfw3.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 4,
-				"fragment" : "libgladd.a",
+				"fragment" : "libglad.a",
 				"role" : "libraries"
 			},
 			{

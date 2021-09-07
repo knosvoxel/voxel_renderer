@@ -21,6 +21,7 @@
 //#include <imgui/backends/imgui_impl_opengl3_loader.h>
 #include <iostream>
 #include <experimental/filesystem>
+#include <vector>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -52,7 +53,8 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 bool escapePressed = false;
 bool shiftKeyPressed = false;
 bool vsyncOn = true;
-bool spotLightOn = false;
+bool showFlashlight = false;
+bool showGUI = false;
 
 namespace fs = std::experimental::filesystem;
 
@@ -113,9 +115,6 @@ int main()
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-
-    bool show_demo_window = false;
-    bool show_another_window = false;
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -266,50 +265,55 @@ float cubeVertices[] = {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Lights");
-        
-        ImGui::Text("Directional Light");
-        ImGui::DragFloat3("Direction", (float*)&dirDirection, 0.01f);
-        ImGui::ColorEdit3("Dir Ambient", (float*)&dirAmbient);  
-        ImGui::ColorEdit3("Dir Diffuse", (float*)&dirDiffuse);  
-        ImGui::ColorEdit3("Dir Specular", (float*)&dirSpecular);   
+        if(showGUI)
+        {
+            ImGui::Begin("Lights");
+                
+            ImGui::Text("Directional Light");
+            ImGui::DragFloat3("Direction", (float*)&dirDirection, 0.01f);
+            ImGui::ColorEdit3("Dir Ambient", (float*)&dirAmbient);  
+            ImGui::ColorEdit3("Dir Diffuse", (float*)&dirDiffuse);  
+            ImGui::ColorEdit3("Dir Specular", (float*)&dirSpecular);   
 
-        ImGui::Text("Point Lights");
-        ImGui::ColorEdit3("Point Light Color", (float*)&lightCubeColor);
-        ImGui::DragFloat("Point Ambient", (float*)&pointAmbientValue, 0.001f);
-        if(pointAmbientValue > 1.0f)
-            pointAmbientValue = 1.0f;
-        if(pointAmbientValue < 0.0f)
-            pointAmbientValue = 0.0f;
-        ImGui::DragFloat("Point Diffuse", (float*)&pointDiffuseValue, 0.001f);  
-        if(pointDiffuseValue > 1.0f)
-            pointDiffuseValue = 1.0f;
-        if(pointDiffuseValue < 0.0f)
-            pointDiffuseValue = 0.0f;
-        ImGui::ColorEdit3("Point Specular", (float*)&pointSpecular);   
-        ImGui::InputFloat("Point Linear", &pointLinear);
-        ImGui::InputFloat("Point Quadratic", &pointQuadratic);
+            ImGui::Text("Point Lights");
+            ImGui::ColorEdit3("Point Light Color", (float*)&lightCubeColor);
+            ImGui::DragFloat("Point Ambient", (float*)&pointAmbientValue, 0.001f);
+            if(pointAmbientValue > 1.0f)
+                pointAmbientValue = 1.0f;
+            if(pointAmbientValue < 0.0f)
+                pointAmbientValue = 0.0f;
+            ImGui::DragFloat("Point Diffuse", (float*)&pointDiffuseValue, 0.001f);  
+            if(pointDiffuseValue > 1.0f)
+               pointDiffuseValue = 1.0f;
+            if(pointDiffuseValue < 0.0f)
+                pointDiffuseValue = 0.0f;
+            ImGui::ColorEdit3("Point Specular", (float*)&pointSpecular);   
+            ImGui::InputFloat("Point Linear", &pointLinear);
+            ImGui::InputFloat("Point Quadratic", &pointQuadratic);
 
-        ImGui::Text("Spotlight");
-        ImGui::ColorEdit3("Spot Ambient", (float*)&spotAmbient);  
-        ImGui::ColorEdit3("Spot Diffuse", (float*)&spotDiffuse);  
-        ImGui::ColorEdit3("Spot Specular", (float*)&spotSpecular);   
-        ImGui::InputFloat("Spot Linear", &spotLinear);
-        ImGui::InputFloat("Spot Quadratic", &spotQuadratic);
-        ImGui::InputFloat("Cutoff", &spotCutOff);
-        ImGui::InputFloat("Outer Cutoff", &spotOuterCutOff);
-        ImGui::Checkbox("Spotlight Active", &spotLightOn);
+            ImGui::Text("Spotlight");
+            ImGui::ColorEdit3("Spot Ambient", (float*)&spotAmbient);  
+            ImGui::ColorEdit3("Spot Diffuse", (float*)&spotDiffuse);  
+            ImGui::ColorEdit3("Spot Specular", (float*)&spotSpecular);   
+            ImGui::InputFloat("Spot Linear", &spotLinear);
+            ImGui::InputFloat("Spot Quadratic", &spotQuadratic);
+            ImGui::InputFloat("Cutoff", &spotCutOff);
+            ImGui::InputFloat("Outer Cutoff", &spotOuterCutOff);
+            ImGui::Checkbox("Spotlight Active", &showGUI);
 
-        ImGui::Text("Camera");
-        ImGui::InputFloat("Movement Speed", &cameraMovementSpeed);
-        ImGui::InputFloat("Boosted Movement Speed", &cameraBoostSpeed);
+            ImGui::Text("Camera");
+            ImGui::InputFloat("Movement Speed", &cameraMovementSpeed);
+            ImGui::InputFloat("Boosted Speed", &cameraBoostSpeed);
+            ImGui::End();
 
-        ImGui::Text("VSync");
-        ImGui::Checkbox("VSync", &vsyncOn);
+        // -----------------------------------------------------------------------
+            ImGui::Begin("Performance");
+            ImGui::Text("VSync");
+            ImGui::Checkbox("VSync", &vsyncOn);
 
-        //ImGui::Text("FPS", framesPerSeconds);
-        ImGui::Text("FPS %f", currentFPS);
-        ImGui::End();
+            ImGui::Text("Frametime: %.3f ms (FPS %.1f)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
 
         pointDiffuse.x = lightCubeColor.x * pointDiffuseValue;
         pointDiffuse.y = lightCubeColor.y * pointDiffuseValue;
@@ -371,7 +375,7 @@ float cubeVertices[] = {
         lightingShader.setFloat("spotLight.constant", 1.0f);
         lightingShader.setFloat("spotLight.linear", spotLinear);
         lightingShader.setFloat("spotLight.quadratic", spotQuadratic);
-        if(spotLightOn)
+        if(showFlashlight)
         {
             lightingShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(spotCutOff)));
             lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(spotOuterCutOff))); 
@@ -509,15 +513,28 @@ void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, in
         
         }
 
+
         if (key == GLFW_KEY_F && action == GLFW_PRESS)
         {
-            if(spotLightOn)
+            if(showFlashlight)
             {
-                spotLightOn = false;
+                showFlashlight = false;
             }
             else
             {
-                spotLightOn = true;
+                showFlashlight = true;
+            }
+        }
+
+        if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
+        {
+            if(showGUI)
+            {
+                showGUI = false;
+            }
+            else
+            {
+                showGUI = true;
             }
         }
 }
