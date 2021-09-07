@@ -228,7 +228,7 @@ float cubeVertices[] = {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         
-        ++framesPerSeconds;
+       /* ++framesPerSeconds;
 
         if(currentFrame - lastTime > 1.0f)
         {
@@ -236,7 +236,7 @@ float cubeVertices[] = {
             currentFPS = framesPerSeconds;
 
             framesPerSeconds = 0;
-        }
+        }*/
 
         if(vsyncOn)
         {
