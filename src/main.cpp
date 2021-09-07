@@ -19,8 +19,8 @@
 
 //#include <imgui/backends/imgui_impl_opengl3.h>
 //#include <imgui/backends/imgui_impl_opengl3_loader.h>
-
 #include <iostream>
+#include <experimental/filesystem>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -54,8 +54,12 @@ bool shiftKeyPressed = false;
 bool vsyncOn = true;
 bool spotLightOn = false;
 
+namespace fs = std::experimental::filesystem;
+
 int main()
 {
+    fs::current_path("../");
+    
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -139,10 +143,10 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader lightingShader("../shaders/lighting.vs", "../shaders/lighting.fs");
-    Shader lightCubeShader("../shaders/light_cube.vs", "../shaders/light_cube.fs");
+    Shader lightingShader("shaders/lighting.vs", "shaders/lighting.fs");
+    Shader lightCubeShader("shaders/light_cube.vs", "shaders/light_cube.fs");
 
-    Model ourModel("../res/objects/backpack/backpack.obj");
+    Model ourModel("res/objects/backpack/backpack.obj");
 
 float cubeVertices[] = {
     // Back face

@@ -67,7 +67,7 @@
 			{
 				"command" : 4,
 				"file" : 2,
-				"line" : 13,
+				"line" : 16,
 				"parent" : 7
 			}
 		]
@@ -79,6 +79,9 @@
 			[
 				{
 					"fragment" : "-g -fvisibility=hidden -fno-strict-aliasing -Wall -fPIC -std=c++0x  -g"
+				},
+				{
+					"fragment" : "-std=gnu++17"
 				}
 			],
 			"defines" : 
@@ -120,6 +123,14 @@
 				}
 			],
 			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "17"
+			},
 			"sourceIndexes" : 
 			[
 				5

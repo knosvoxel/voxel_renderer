@@ -2162,6 +2162,18 @@
 			"value" : "OFF"
 		},
 		{
+			"name" : "HAS_FS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Result of TRY_COMPILE"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "FALSE"
+		},
+		{
 			"name" : "HUNTER_ENABLED",
 			"properties" : 
 			[

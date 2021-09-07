@@ -29,61 +29,61 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 14,
+				"line" : 17,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 25,
+				"line" : 18,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 34,
+				"line" : 29,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 41,
+				"line" : 38,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 45,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 27,
+				"line" : 31,
 				"parent" : 0
 			},
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 13,
+				"line" : 16,
 				"parent" : 0
 			},
 			{
 				"command" : 4,
 				"file" : 0,
-				"line" : 15,
+				"line" : 19,
 				"parent" : 0
 			},
 			{
 				"command" : 4,
 				"file" : 0,
-				"line" : 26,
+				"line" : 30,
 				"parent" : 0
 			},
 			{
 				"command" : 4,
 				"file" : 0,
-				"line" : 33,
-				"parent" : 0
-			},
-			{
-				"command" : 4,
-				"file" : 0,
-				"line" : 40,
+				"line" : 37,
 				"parent" : 0
 			},
 			{
@@ -95,13 +95,19 @@
 			{
 				"command" : 4,
 				"file" : 0,
-				"line" : 45,
+				"line" : 48,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 49,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 0,
-				"line" : 16,
+				"line" : 20,
 				"parent" : 0
 			}
 		]
@@ -121,46 +127,46 @@
 			"defines" : 
 			[
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"define" : "GLFW_INCLUDE_NONE"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 6,
+					"backtrace" : 7,
 					"path" : "/home/niklas/Desktop/voxel_renderer"
 				},
 				{
-					"backtrace" : 7,
+					"backtrace" : 8,
 					"path" : "/home/niklas/Desktop/voxel_renderer/src"
 				},
 				{
-					"backtrace" : 8,
+					"backtrace" : 9,
 					"path" : "/home/niklas/Desktop/voxel_renderer/lib/glfw/include"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 10,
 					"path" : "/home/niklas/Desktop/voxel_renderer/lib/glad/include"
 				},
 				{
-					"backtrace" : 10,
+					"backtrace" : 11,
 					"path" : "/home/niklas/Desktop/voxel_renderer/lib/assimp/include"
 				},
 				{
-					"backtrace" : 11,
+					"backtrace" : 12,
 					"path" : "/home/niklas/Desktop/voxel_renderer/include"
 				},
 				{
-					"backtrace" : 12,
+					"backtrace" : 13,
 					"path" : "/home/niklas/Desktop/voxel_renderer/res"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 5,
 					"path" : "/home/niklas/Desktop/voxel_renderer/lib/assimp/code/../include"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 5,
 					"path" : "/home/niklas/Desktop/voxel_renderer/build/lib/assimp/code/../include"
 				}
 			],
@@ -169,7 +175,7 @@
 			{
 				"backtraces" : 
 				[
-					13
+					14
 				],
 				"standard" : "11"
 			},
@@ -189,19 +195,19 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 3,
+			"backtrace" : 4,
 			"id" : "glad::@6890427a1f51a3e7e1df"
 		},
 		{
-			"backtrace" : 2,
+			"backtrace" : 3,
 			"id" : "glfw::@17f284a5fc0809a54549"
 		},
 		{
-			"backtrace" : 4,
+			"backtrace" : 5,
 			"id" : "IrrXML::@5552482383d9422ffa26"
 		},
 		{
-			"backtrace" : 4,
+			"backtrace" : 5,
 			"id" : "assimp::@79060bfa1581667c9fa0"
 		}
 	],
@@ -220,26 +226,31 @@
 			},
 			{
 				"backtrace" : 2,
+				"fragment" : "-lstdc++fs",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
 				"fragment" : "lib/glfw/src/libglfw3d.a",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 3,
+				"backtrace" : 4,
 				"fragment" : "libgladd.a",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 3,
+				"backtrace" : 4,
 				"fragment" : "-ldl",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 4,
+				"backtrace" : 5,
 				"fragment" : "lib/assimp/code/libassimpd.a",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 3,
+				"backtrace" : 4,
 				"fragment" : "-ldl",
 				"role" : "libraries"
 			},
@@ -248,7 +259,7 @@
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 3,
+				"backtrace" : 4,
 				"fragment" : "-ldl",
 				"role" : "libraries"
 			},
