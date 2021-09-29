@@ -1,5 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define OGT_VOX_IMPLEMENTATION
+#define OGT_VOXEL_MESHIFY_IMPLEMENTATION
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -18,8 +19,7 @@
 #include "ownImgui.h"
 #include "lightValues.h"
 
-#include "ogt_vox.h"
-#include "ogt_voxel_meshify.h"
+#include "vox_loading.h"
 
 #if defined(_MSC_VER)
 #include <io.h>
@@ -209,44 +209,138 @@ int main()
     static float framesPerSeconds = 0.0f;
     static float currentFPS = 0.0f;
     static float lastTime = 0.0f;
-    //CubeLights cubeLights;
-    //cubeLights.addLight(pointLightPositions[0]);
 
     LightValues lightValues;
     std::vector<std::vector<glm::vec3>> model_positions;
 
-    const ogt_vox_scene *scene = load_vox_scene("res/vox/Ruriko-ji Temple Pagoda.vox");
-    std::vector<ogt_mesh*> meshes;
-    if (scene)
+    const ogt_vox_scene *scene = load_vox_scene("res/vox/temple.vox");
+    std::vector<ogt_mesh *> meshes;
+    uint32_t total_voxel_count;
+    std::vector<unsigned int> voxVAOs;
+    std::vector<unsigned int> voxVBOs;
+    std::vector<unsigned int> voxEBOs;
+    //std::vector<glm::vec3> voxel_positions;
+    /* for (uint32_t model_index = 0; model_index < scene->num_models; model_index++)
+        {
+            const ogt_vox_model *model = scene->models[model_index];
+            total_voxel_count += count_solid_voxels_in_model(model);
+            ogt_voxel_meshify_context ctx;
+            memset(&ctx, 0, sizeof(ctx));
+            ogt_mesh *mesh = ogt_mesh_from_paletted_voxels_simple(&ctx, model->voxel_data, model->size_x, model->size_y, model->size_z, (const ogt_mesh_rgba *)&scene->palette.color[0]);
+            meshes.push_back(mesh);
+        }
+
+        std::cout << "Total voxel count: " << total_voxel_count << std::endl;
+
+        ogt_vox_destroy_scene(scene);
+
+        for (int i = 0; i < meshes.size(); ++i)
+        {
+            unsigned int voxVAO, voxVBO, voxEBO;
+
+            glGenVertexArrays(1, &voxVAO);
+            glGenBuffers(1, &voxVBO);
+            glGenBuffers(1, &voxEBO);
+
+            glBindVertexArray(voxVAO);
+            glBindBuffer(GL_ARRAY_BUFFER, voxVBO);
+
+            glBufferData(GL_ARRAY_BUFFER, meshes[i]->vertex_count * sizeof(ogt_mesh_vertex), &meshes[i]->vertices[0], GL_STATIC_DRAW);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, voxEBO);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshes[i]->index_count * sizeof(uint32_t), &meshes[i]->indices[0], GL_STATIC_DRAW);
+
+            // vertex positions
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ogt_mesh_vertex), (void *)0);
+            // vertex normals
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(ogt_mesh_vertex), (void *)offsetof(ogt_mesh_vertex, normal));
+            // vertex texture coords
+            glEnableVertexAttribArray(2);
+            glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(ogt_mesh_rgba), (void *)offsetof(ogt_mesh_vertex, color));
+
+            glBindVertexArray(0);
+
+            voxVAOs.push_back(voxVAO);
+            voxVBOs.push_back(voxVBO);
+            voxEBOs.push_back(voxEBO);*/
+    GLuint global_vao = 0;
+    glGenVertexArrays(1, &global_vao);
+    glBindVertexArray(global_vao);
+
+    //---------------------------------------------------------------------------------------------------
+    // create a giant vertex buffer and a giant index buffer that will contain all meshes for the scene
+    //---------------------------------------------------------------------------------------------------
+    static const uint32_t k_vertex_buffer_size = 2000 * 2000 * 1000; // 16 MiB. bump this if it's not big enough for your scene(s)
+    static const uint32_t k_index_buffer_size = 512 * 1024 * 1024;   // 4 MiB. bump this if it's not big enough for your scene(s)
+    VoxLoad::buffer vertex_buffer, index_buffer;
+    VoxLoad::create_static_buffer(&vertex_buffer, k_vertex_buffer_size, NULL);
+    VoxLoad::create_static_buffer(&index_buffer, k_index_buffer_size, NULL);
+
+    //---------------------------------------------------------------------------------------------------
+    // turn each voxel model into a mesh and upload it to the vertex buffer and index buffer
+    //---------------------------------------------------------------------------------------------------
+    struct model_desc_gpu
     {
-        //std::vector<glm::vec3> voxel_positions;
+        uint32_t offset_in_vertex_buffer;
+        uint32_t offset_in_index_buffer;
+        uint32_t num_indices;
+    };
+    model_desc_gpu *model_descs = new model_desc_gpu[scene->num_models];
+
+    // create a mesh for each model in the scene and upload to the vertex buffer and index buffer
+    {
+        uint32_t next_vb_offset = 0;
+        uint32_t next_ib_offset = 0;
         for (uint32_t model_index = 0; model_index < scene->num_models; model_index++)
         {
             const ogt_vox_model *model = scene->models[model_index];
 
+            // generate a mesh from the voxel field for this model
             ogt_voxel_meshify_context ctx;
             memset(&ctx, 0, sizeof(ctx));
-            ogt_mesh* mesh = ogt_mesh_from_paletted_voxels_simple(&ctx, model->voxel_data, model->size_x, model->size_y, model->size_z, (const ogt_mesh_rgba*)&scene->palette.color[0]);
-            meshes.push_back(mesh);
+            ogt_mesh *mesh = ogt_mesh_from_paletted_voxels_simple(&ctx, model->voxel_data, model->size_x, model->size_y, model->size_z, (const ogt_mesh_rgba *)&scene->palette.color[0]);
 
-            /*
-            std::vector<glm::vec3> voxel_positions = getVoxelPositions(model);
-            model_positions.push_back(voxel_positions);
-            uint32_t total_voxel_count = model->size_x * model->size_y * model->size_z;
+            // make sure this mesh can fit in the vertex buffer and index buffer
+            uint32_t mesh_size_in_vb = mesh->vertex_count * sizeof(ogt_mesh_vertex);
+            uint32_t mesh_size_in_ib = mesh->index_count * sizeof(uint32_t);
+            assert((next_vb_offset + mesh_size_in_vb) <= k_vertex_buffer_size); // if you hit this, bump up k_vertex_buffer_size
+            assert((next_ib_offset + mesh_size_in_ib) <= k_index_buffer_size);  // if you hit this, bump up k_index_buffer_size
 
-            printf(" model[%u] has dimension %ux%ux%u, with %u solid voxels of the total %u voxels (hash=%u)!\n",
-                   model_index,
-                   model->size_x, model->size_y, model->size_z,
-                   total_voxel_count,
-                   model->voxel_hash);
-                   */
+            // update the descriptor for this model that remembers where in the VB/IB the mesh lives
+            model_descs[model_index].offset_in_vertex_buffer = next_vb_offset;
+            model_descs[model_index].offset_in_index_buffer = next_ib_offset;
+            model_descs[model_index].num_indices = mesh->index_count;
+
+            // upload data to the VB/IB
+            next_vb_offset += mesh_size_in_vb;
+            next_ib_offset += mesh_size_in_ib;
+
+            // free the mesh (it's already been uploaded to VB/IB so is no longer needed)
+            ogt_mesh_destroy(&ctx, mesh);
         }
-
-        //save_vox_scene("saved.vox", scene);
-
-        ogt_vox_destroy_scene(scene);
-
     }
+    //------------------------------------------------------------------------------------------
+    // remember instance transforms and model index so we don't need to keep the scene around
+    //------------------------------------------------------------------------------------------
+    struct instance_desc_gpu
+    {
+        uint32_t model_index;        // which model in the model_descs array does this instance refer to?
+        ogt_vox_transform transform; // what is the object-space -> world-space transform for this instance
+    };
+
+    instance_desc_gpu *instance_descs = new instance_desc_gpu[scene->num_instances];
+    uint32_t num_instances = scene->num_instances;
+    for (uint32_t i = 0; i < num_instances; i++)
+    {
+        instance_descs[i].model_index = scene->instances[i].model_index;
+        instance_descs[i].transform = scene->instances[i].transform;
+    }
+
+    // we have all our data capture into instance_descs and model_descs at this point, so we no longer need the scene
+    ogt_vox_destroy_scene(scene);
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -256,17 +350,7 @@ int main()
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
-        /* ++framesPerSeconds;
-
-        if(currentFrame - lastTime > 1.0f)
-        {
-            lastTime = currentFrame;
-            currentFPS = framesPerSeconds;
-
-            framesPerSeconds = 0;
-        }*/
-
+        
         if (vsyncOn)
         {
             glfwSwapInterval(1);
@@ -322,31 +406,28 @@ int main()
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
         lightingShader.setMat4("model", model);
-        ourModel.Draw(lightingShader);
+        //ourModel.Draw(lightingShader);
 
-        for (unsigned int i = 0; i < meshes.size(); ++i)
+        // we have all our models in the same vertex buffer and index buffer, so we only need to bind VB/IB once
+        // for all models, and not once for each model. If you decided to create a new VB/IB for each model, you'd
+        // have to bind VB/IB just before drawing any instance that used that model.
+
+        VoxLoad::bind_vertex_buffer(&vertex_buffer);
+        VoxLoad::bind_index_buffer(&index_buffer);
+
+        // iterate over all instances.
+        // TODO: we could sort all instances within instance_desc by model_index and then issue less draw calls
+        // by using an "instancing" shader.
+        for (uint32_t instance_index = 0; instance_index < num_instances; instance_index++)
         {
-            ogt_mesh mesh = &meshes[i];
-            glBegin(GL_TRIANGLES);
-        for (uint32_t i = 0; i < mesh->index_count; i+=3)
-        {
-          uint32_t i0 = mesh->indices[i + 0];
-          uint32_t i1 = mesh->indices[i + 1];
-          uint32_t i2 = mesh->indices[i + 2];
-          const ogt_mesh_vertex* v0 = &mesh->vertices[i0];
-          const ogt_mesh_vertex* v1 = &mesh->vertices[i1];
-          const ogt_mesh_vertex* v2 = &mesh->vertices[i2];
-          glColor4ubv(&v0->color);
-          glNormal3fv(&v0->normal);
-          glVertex3fv(&v0->pos);
-          glColor4ubv(&v1->color);
-          glNormal3fv(&v1->normal);
-          glVertex3fv(&v1->pos);
-          glColor4ubv(&v2->color);
-          glNormal3fv(&v2->normal);
-          glVertex3fv(&v2->pos);
-        }
-        glEnd();
+            const instance_desc_gpu *instance_desc = &instance_descs[instance_index];
+            const model_desc_gpu *model_desc = &model_descs[instance_desc->model_index];
+            // TODO: upload the instance->transform to the correct uniform buffer.
+            // TODO: bind the correct vertex/pixel shader that consumes position/normal/color from the correct input slots in the vertex shader.
+
+            // issue the draw call.
+            uint32_t base_vertex_start = model_desc->offset_in_vertex_buffer / sizeof(ogt_mesh_vertex);
+            glDrawElementsInstancedBaseVertex(GL_TRIANGLES, model_desc->num_indices, GL_UNSIGNED_INT, (const void *)((uint64_t)model_desc->offset_in_index_buffer), 1, base_vertex_start);
         }
 
         // also draw the lamp objects
@@ -375,6 +456,23 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    // shutdown
+    delete[] instance_descs;
+    delete[] model_descs;
+
+    // unbind and destroy vertex buffer
+    VoxLoad::bind_vertex_buffer(NULL);
+    VoxLoad::destroy_buffer(&vertex_buffer);
+
+    // unbind and destroy vertex buffer
+    VoxLoad::bind_index_buffer(NULL);
+    VoxLoad::destroy_buffer(&index_buffer);
+
+    // unbind/destroy the vao
+    glBindVertexArray(0);
+    glDeleteVertexArrays(1, &global_vao);
+    global_vao = 0;
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
@@ -578,7 +676,7 @@ std::vector<glm::vec3> getVoxelPositions(const ogt_vox_model *model)
     }
     return voxel_positions;
 }
-/*uint32_t count_solid_voxels_in_model(const ogt_vox_model *model)
+uint32_t count_solid_voxels_in_model(const ogt_vox_model *model)
 {
     uint32_t solid_voxel_count = 0;
     uint32_t voxel_index = 0;
@@ -595,7 +693,7 @@ std::vector<glm::vec3> getVoxelPositions(const ogt_vox_model *model)
                     std::cout << color_index << ' ';
                 if(counter >= 10)
                     std::cout << std::endl;*/
-/*
+
                 bool is_voxel_solid = (color_index != 0);
                 // add to our accumulator
                 solid_voxel_count += (is_voxel_solid ? 1 : 0);
@@ -603,7 +701,7 @@ std::vector<glm::vec3> getVoxelPositions(const ogt_vox_model *model)
         }
     }
     return solid_voxel_count;
-}*/
+}
 
 void save_vox_scene(const char *pcFilename, const ogt_vox_scene *scene)
 {
